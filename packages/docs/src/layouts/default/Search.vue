@@ -1,6 +1,7 @@
 <template>
   <!-- eslint-disable vue/attribute-hyphenation  -->
   <v-menu
+    ref="menu"
     v-model="menuModel"
     max-height="75vh"
     offset-y
@@ -23,6 +24,7 @@
         solo
         style="max-width: 450px;"
         @focus="onFocus"
+        @keydown="onKeyDown"
       >
         <template #prepend-inner>
           <v-icon
@@ -130,6 +132,15 @@
     },
 
     methods: {
+      onKeyDown (e) {
+        if (this.$refs.menu.listIndex === -1 && e.keyCode === 9) {
+          e.preventDefault()
+          this.$refs.menu.getTiles()
+          this.$refs.menu.firstTile()
+        } else {
+          this.$refs.menu.onKeyDown(e)
+        }
+      },
       async onFocus () {
         clearTimeout(this.timeout)
 
